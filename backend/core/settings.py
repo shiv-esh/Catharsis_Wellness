@@ -86,7 +86,14 @@ DATABASES = {
 }
 
 MONGO_URI = os.getenv('MONGO_URI', 'mongodb://localhost:27017/catharsis_wellness')
-CORS_ALLOW_ALL_ORIGINS = True # For development
+
+# CORS Configuration
+frontend_URL = os.getenv('frontend_URL', 'http://localhost:3000')
+CORS_ALLOWED_ORIGINS = [
+    frontend_URL,
+]
+# Allow communication from Vercel preview deployments if needed
+# CORS_ALLOWED_ORIGIN_REGEXES = [r"^https://.*-your-username\.vercel\.app$"]
 
 
 # Password validation
@@ -124,6 +131,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
 STATIC_URL = 'static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 # Email Configuration
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'

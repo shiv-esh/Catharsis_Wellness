@@ -14,7 +14,9 @@ export default function BookSession() {
     const data = Object.fromEntries(formData.entries());
 
     try {
-      const response = await fetch('http://127.0.0.1:8000/api/booking/', {
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000';
+      console.log('Using API URL:', apiUrl);
+      const response = await fetch(`${apiUrl}/api/booking/`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data),
