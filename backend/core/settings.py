@@ -88,10 +88,22 @@ DATABASES = {
 MONGO_URI = os.getenv('MONGO_URI', 'mongodb://localhost:27017/catharsis_wellness')
 
 # CORS Configuration
-frontend_URL = os.getenv('frontend_URL', 'http://localhost:3000')
-CORS_ALLOWED_ORIGINS = [
-    frontend_URL,
+# frontend_URL can be a comma-separated list of allowed origins
+frontend_urls = os.getenv('frontend_URL', 'http://localhost:3000').split(',')
+CORS_ALLOWED_ORIGINS = [url.strip() for url in frontend_urls if url.strip()]
+
+# Specifically ensure the Vercel app and local dev are allowed
+default_origins = [
+    "https://catharsis-wellness.vercel.app",
+    "http://localhost:3000",
+    "http://127.0.0.1:3000",
 ]
+
+for origin in default_origins:
+    if origin not in CORS_ALLOWED_ORIGINS:
+        CORS_ALLOWED_ORIGINS.append(origin)
+
+CORS_ALLOW_CREDENTIALS = True
 # Allow communication from Vercel preview deployments if needed
 # CORS_ALLOWED_ORIGIN_REGEXES = [r"^https://.*-your-username\.vercel\.app$"]
 
