@@ -6,6 +6,7 @@ import { Calendar, Clock, User, Phone, Mail, MapPin, CheckCircle } from 'lucide-
 export default function BookSession() {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [submittedData, setSubmittedData] = useState<any>(null);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -23,6 +24,7 @@ export default function BookSession() {
       });
 
       if (response.ok) {
+        setSubmittedData(data);
         setIsSubmitted(true);
         window.scrollTo({ top: 0, behavior: 'smooth' });
       } else {
@@ -36,15 +38,44 @@ export default function BookSession() {
     }
   };
 
-  if (isSubmitted) {
+  if (isSubmitted && submittedData) {
     return (
-      <div className="section-padding animate-fade" style={{ textAlign: 'center', minHeight: '60vh', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
-        <CheckCircle size={80} color="var(--primary)" style={{ marginBottom: '20px' }} />
-        <h1 style={{ marginBottom: '15px' }}>Booking Request Sent!</h1>
-        <p style={{ color: 'var(--text-muted)', maxWidth: '500px', margin: '0 auto 30px' }}>
-          Thank you for choosing Catharsis Wellness. Manasi Srivastava or our team will contact you shortly to confirm your session.
-        </p>
-        <button onClick={() => window.location.href = '/'} className="btn-primary">Return Home</button>
+      <div className="section-padding animate-fade" style={{ textAlign: 'center', minHeight: '80vh', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
+        <div className="glass" style={{ padding: '40px', borderRadius: '30px', maxWidth: '600px', width: '100%', boxShadow: 'var(--shadow)' }}>
+          <CheckCircle size={60} color="var(--primary)" style={{ marginBottom: '20px' }} />
+          <h1 style={{ marginBottom: '15px', fontSize: '2rem' }}>Booking Request Sent!</h1>
+          <p style={{ color: 'var(--text-muted)', marginBottom: '30px' }}>
+            Thank you for choosing Catharsis Wellness. We have received your request and will contact you shortly.
+          </p>
+          
+          <div style={{ textAlign: 'left', background: 'rgba(var(--primary-rgb), 0.05)', padding: '25px', borderRadius: '20px', marginBottom: '30px' }}>
+            <h3 style={{ marginBottom: '15px', fontSize: '1.1rem', color: 'var(--primary)' }}>Booking Summary</h3>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                <span style={{ fontWeight: 600 }}>Name:</span>
+                <span>{submittedData.full_name}</span>
+              </div>
+              <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                <span style={{ fontWeight: 600 }}>Therapy:</span>
+                <span>{submittedData.therapy_type}</span>
+              </div>
+              <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                <span style={{ fontWeight: 600 }}>Date:</span>
+                <span>{submittedData.date}</span>
+              </div>
+              <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                <span style={{ fontWeight: 600 }}>Time:</span>
+                <span>{submittedData.time}</span>
+              </div>
+              <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                <span style={{ fontWeight: 600 }}>Mode:</span>
+                <span>{submittedData.mode}</span>
+              </div>
+            </div>
+          </div>
+          
+          <button onClick={() => window.location.href = '/'} className="btn-primary" style={{ width: '100%' }}>Return Home</button>
+        </div>
       </div>
     );
   }

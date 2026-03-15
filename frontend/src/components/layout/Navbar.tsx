@@ -1,16 +1,25 @@
 'use client';
 
 import Link from 'next/link';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Menu, X } from 'lucide-react';
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
 
+  const [isTherapist, setIsTherapist] = useState(false);
+
+  useEffect(() => {
+    // Check if therapist is logged in
+    const token = typeof window !== 'undefined' ? localStorage.getItem('therapist_token') : null;
+    setIsTherapist(!!token);
+  }, []);
+
   const navLinks = [
     { name: 'Home', path: '/' },
     { name: 'About', path: '/about' },
     { name: 'Services', path: '/services' },
+    { name: 'History', path: '/history' },
   ];
 
   return (
@@ -19,12 +28,13 @@ export default function Navbar() {
         <Link href="/" style={{ fontSize: '1.4rem', fontWeight: 'bold', color: 'var(--text-dark)' }}>
           Catharsis <span style={{ color: 'var(--text-muted)' }}>Wellness</span>
         </Link>
-
-        {/* Desktop Menu */}
         <div className="desktop-nav" style={{ display: 'flex', gap: '30px', alignItems: 'center' }}>
           {navLinks.map((link) => (
             <Link key={link.path} href={link.path} style={{ fontWeight: '500' }}>{link.name}</Link>
           ))}
+          {isTherapist && (
+            <Link href="/therapist/dashboard" style={{ fontWeight: '600', color: 'var(--primary)' }}>Dashboard</Link>
+          )}
           <Link href="/book-session" className="btn-primary" style={{ padding: '10px 24px', fontSize: '0.9rem' }}>Book a Session</Link>
         </div>
 
@@ -58,6 +68,11 @@ export default function Navbar() {
               {link.name}
             </Link>
           ))}
+          {isTherapist && (
+            <Link href="/therapist/dashboard" onClick={() => setIsOpen(false)} style={{ fontSize: '1.1rem', fontWeight: '600', color: 'var(--primary)' }}>
+              Dashboard
+            </Link>
+          )}
           <Link href="/book-session" onClick={() => setIsOpen(false)} className="btn-primary" style={{ textAlign: 'center' }}>
             Book a Session
           </Link>

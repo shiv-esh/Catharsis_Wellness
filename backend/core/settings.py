@@ -140,6 +140,7 @@ EMAIL_PORT = int(os.getenv('EMAIL_PORT', 587))
 EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
 EMAIL_USE_TLS = os.getenv('EMAIL_USE_TLS', 'True') == 'True'
+THERAPIST_EMAILS = os.getenv('THERAPIST_EMAILS', 'shiveshmall12499@gmail.com').split(',')
 
 # Fallback to console backend for local testing if credentials are missing
 if not EMAIL_HOST_USER or EMAIL_HOST_USER == 'your-email@gmail.com':
